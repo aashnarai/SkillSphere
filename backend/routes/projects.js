@@ -26,5 +26,16 @@ router.post("/create", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+router.get("/all", async (req, res) => {
+  try {
+
+    const projects = await Project.find().populate("clientId", "name email");
+
+    res.json(projects);
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 module.exports = router;
