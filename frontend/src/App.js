@@ -1,7 +1,7 @@
-import Register from "./Register";
+import Projects from "./Projects";
 
 function App() {
-  return <Register />;
+  return <Projects />;
 }
 
 export default App;
