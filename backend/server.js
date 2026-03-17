@@ -25,6 +25,9 @@ app.use("/api/auth", authRoutes);
 
 const projectRoutes = require("./routes/projects");
 app.use("/api/projects", projectRoutes);
+const proposalRoutes = require("./routes/proposals");
+
+app.use("/api/proposals", proposalRoutes);
 
 /* -------------------- Server -------------------- */
 const PORT = process.env.PORT || 5000;
