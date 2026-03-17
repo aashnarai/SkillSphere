@@ -25,5 +25,18 @@ router.post("/apply", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+router.get("/project/:projectId", async (req, res) => {
+  try {
 
+    const { projectId } = req.params;
+
+    const proposals = await Proposal.find({ projectId })
+      .populate("freelancerId", "name email");
+
+    res.json(proposals);
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 module.exports = router;
