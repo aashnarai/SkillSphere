@@ -1,31 +1,35 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = async () => {
-    try {
-      const res = await axios.post(
-        "http://localhost:5000/api/auth/login",
-        { email, password }
-      );
+  const navigate = useNavigate();
 
-      console.log(res.data);
+const handleLogin = async () => {
+  try {
+    const res = await axios.post(
+      "http://localhost:5000/api/auth/login",
+      { email, password }
+    );
 
-      // Save token
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+    console.log(res.data);
 
-      alert("Login successful");
+    localStorage.setItem("token", res.data.token);
+    localStorage.setItem("user", JSON.stringify(res.data.user));
 
-    } catch (err) {
-      alert("Login failed");
-      console.log(err);
-    }
-  };
+    alert("Login successful");
+
+    navigate("/projects"); // ✅ ADD THIS
+window.location.reload();
+  } catch (err) {
+    alert(err.response?.data?.message || "Login failed");
+    console.log(err);
+  }
+};
 
   return (
     <div style={{ padding: "20px" }}>

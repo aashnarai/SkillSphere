@@ -22,6 +22,30 @@ function Projects() {
     }
   };
 
+  // ✅ NEW FUNCTION
+  const applyToProject = async (projectId) => {
+    try {
+
+      const user = JSON.parse(localStorage.getItem("user"));
+
+      await axios.post(
+        "http://localhost:5000/api/proposals/apply",
+        {
+          projectId,
+          freelancerId: user.id,
+          message: "I can do this project",
+          bidAmount: 4000
+        }
+      );
+
+      alert("Applied successfully!");
+
+    } catch (error) {
+      console.log(error);
+      alert("Error applying");
+    }
+  };
+
   return (
     <div style={{ padding: "20px" }}>
       <h2>Projects</h2>
@@ -36,6 +60,12 @@ function Projects() {
           <p>{project.description}</p>
           <p>Budget: ₹{project.budget}</p>
           <p>Client: {project.clientId?.name}</p>
+
+          {/* ✅ APPLY BUTTON */}
+          <button onClick={() => applyToProject(project._id)}>
+            Apply
+          </button>
+
         </div>
       ))}
 
