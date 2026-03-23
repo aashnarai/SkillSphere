@@ -28,7 +28,7 @@ app.use("/api/projects", projectRoutes);
 const proposalRoutes = require("./routes/proposals");
 
 app.use("/api/proposals", proposalRoutes);
-
+app.use("/api/reviews", require("./routes/reviews"));
 /* -------------------- Server -------------------- */
 const PORT = process.env.PORT || 5000;
 
