@@ -19,7 +19,7 @@ mongoose
 app.get("/", (req, res) => {
   res.send("SkillSphere API running");
 });
-
+app.use("/api/admin", require("./routes/admin"));
 const authRoutes = require("./routes/auth");
 app.use("/api/auth", authRoutes);
 

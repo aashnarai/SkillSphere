@@ -9,35 +9,7 @@ function FreelancerHub() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("overview");
-    const applyToProject = async (projectId) => {
-  try {
-    const token = localStorage.getItem("token");
-    const user = JSON.parse(localStorage.getItem("user"));
 
-    await axios.post(
-      "http://localhost:5000/api/proposals/apply",
-      {
-        projectId,
-        freelancerId: user._id,
-        message: "I can do this project",
-        bidAmount: 4000,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    alert("Applied successfully!");
-
-    fetchData(); // refresh data
-
-  } catch (err) {
-    console.log(err);
-    alert("Error applying");
-  }
-};
   useEffect(() => {
     if (user?._id && token) {
       fetchData();

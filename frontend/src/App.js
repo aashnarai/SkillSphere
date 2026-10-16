@@ -11,23 +11,31 @@ import FreelancerHub from "./FreelancerHub";
 import ChatUI from "./Chat";
 import Notifications from "./Notifications";
 import Reviews from "./Reviews";
+import AdminDashboard from "./AdminDashboard";
 
 function App() {
   return (
     <BrowserRouter>
+
+      {/* ✅ Always outside Routes */}
       <Navbar />
+
       <Routes>
+
+        {/* Public */}
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
-<Route
-  path="/dashboard"
-  element={
-    <ProtectedRoute>
-      <Dashboard />
-    </ProtectedRoute>
-  }
-/>
-        {/* ✅ PROTECTED ROUTES */}
+
+        {/* Protected */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/projects"
           element={
@@ -51,17 +59,26 @@ function App() {
           element={
             <ProtectedRoute>
               <ViewProposals />
-              <Route path="/notifications" element={<Notifications />} />
-
             </ProtectedRoute>
           }
         />
-              <Route path="/chat" element={<ChatUI />} />
-<Route path="/reviews" element={<Reviews />} />
+
+        <Route
+          path="/freelancer"
+          element={
+            <ProtectedRoute>
+              <FreelancerHub />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Others */}
+        <Route path="/chat" element={<ChatUI />} />
+        <Route path="/notifications" element={<Notifications />} />
+        <Route path="/reviews" element={<Reviews />} />
+        <Route path="/admin" element={<AdminDashboard />} />
 
       </Routes>
-      <FreelancerHub />
-
     </BrowserRouter>
   );
 }
