@@ -27,7 +27,18 @@ function Login() {
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
 
-      navigate("/projects");
+      
+const { token, user } = res.data;
+
+localStorage.setItem("token", token);
+localStorage.setItem("user", JSON.stringify(user));
+
+if (user.role === "admin") {
+  navigate("/admin");
+} else {
+  navigate("/projects");
+}
+
     } catch (err) {
       setError(err.response?.data?.message || "Invalid email or password.");
       console.log(err);

@@ -7,21 +7,46 @@ const User      = require("../models/User");
 // ── MIDDLEWARE: Verify JWT Token ──
 // Use this in any route that needs authentication
 // Example: router.get("/profile", verifyToken, (req, res) => { ... })
-const verifyToken = (req, res, next) => {
+const verifyToken = async (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(401).json({ message: "No token provided" });
   }
 
-  const token = authHeader.split(" ")[1];
-
   try {
+    const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // { id, role }
+
+    const user = await User.findById(decoded.id).select(
+      "_id role isSuspended"
+    );
+
+    if (!user) {
+      return res.status(401).json({ message: "User not found" });
+    }
+
+    if (user.isSuspended) {
+      return res.status(403).json({ message: "Account suspended" });
+    }
+
+    req.user = {
+      id: user._id.toString(),
+      role: user.role,
+    };
+
     next();
   } catch (err) {
-    return res.status(401).json({ message: "Invalid or expired token" });
+    if (err.name === "JsonWebTokenError" ||
+        err.name === "TokenExpiredError") {
+      return res.status(401).json({
+        message: "Invalid or expired token",
+      });
+    }
+
+    return res.status(500).json({
+      message: "Authentication failed",
+    });
   }
 };
 
@@ -51,10 +76,11 @@ router.post("/register", async (req, res) => {
       return res.status(400).json({ message: "Password must be at least 6 characters" });
     }
 
-    const validRoles = ["client", "freelancer", "admin"];
-    if (!validRoles.includes(role)) {
-      return res.status(400).json({ message: "Invalid role" });
-    }
+  const validRoles = ["client", "freelancer"];
+
+if (!validRoles.includes(role)) {
+  return res.status(400).json({ message: "Invalid role" });
+}
 
     // Check existing user
     const existingUser = await User.findOne({ email });

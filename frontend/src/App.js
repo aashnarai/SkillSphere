@@ -76,8 +76,27 @@ function App() {
         <Route path="/chat" element={<ChatUI />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/reviews" element={<Reviews />} />
-        <Route path="/admin" element={<AdminDashboard />} />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
 
+        {/* Others */}
+        <Route path="/chat" element={<ChatUI />} />
+        <Route path="/notifications" element={<Notifications />} />
+        <Route path="/reviews" element={<Reviews />} />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
